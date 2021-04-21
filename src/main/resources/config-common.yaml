@@ -1,0 +1,8 @@
+http:
+  private: 
+    port: "8081"
+
+jsonplaceholder:
+  host: "jsonplaceholder.typicode.com" 
+  port: "80"
+  protocol: "HTTP"

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="postComments" doc:id="112f50ee-90ef-4539-8d77-685bfb9bb0a5" >
+		<http:request method="POST" doc:name="Request" doc:id="0da52022-08df-4548-9c4a-31e5e781f631" config-ref="HTTP_Request_configuration" path="/comments">
+		</http:request>
+		<set-payload value='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;  data: "Comment has been created."&#10;}]' doc:name="Set Payload" doc:id="66f3d9cf-1a0c-40c3-bc74-f1bfea340671" />
+		<set-variable value="201" doc:name="Set HTTP Status" doc:id="da415cd5-79af-499a-86fe-82a4219c9c6a" variableName="httpStatus" />
+	</flow>
+	<flow name="putComments" doc:id="6a7b2d92-94fd-4290-aad8-51fdba6c1248" >
+		<http:request method="PUT" doc:name="Request" doc:id="c6592036-bf07-4250-89e5-c74908d308e0" config-ref="HTTP_Request_configuration" path="/comments/{postId}" >
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	'postId' : attributes.uriParams.postId
+}]]]></http:uri-params>
+		</http:request>
+		<set-payload value='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;  data: "Comment has been updated."&#10;}]' doc:name="Set Payload" doc:id="7a9cd12a-0378-4255-a2a3-19f6a02a67ac" />
+		<set-variable value="201" doc:name="Set HTTP Status" doc:id="36b5c08c-bee8-463e-8c3d-9937dff37a52" variableName="httpStatus" />
+	</flow>
+	<flow name="getComments" doc:id="d4c67dbe-391f-4d24-b8cc-7e11629245e7" >
+		<http:request method="GET" doc:name="Request" doc:id="6ebaba9e-9633-4076-9199-399d424f1cba" config-ref="HTTP_Request_configuration" path="/comments"/>
+		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="5dda7e02-386e-4fde-aa1c-0fe57de96042" />
+		<set-variable value="200" doc:name="Set HTTP Status" doc:id="a4499b44-1673-476c-93df-09504cb36f77" variableName="httpStatus"/>
+	</flow>
+</mule>
